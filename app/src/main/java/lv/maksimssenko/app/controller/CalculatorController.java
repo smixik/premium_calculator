@@ -16,6 +16,11 @@ public class CalculatorController {
         this.premiumCalculator = premiumCalculator;
     }
 
+    /**
+     *
+     * @param policy as JSON object
+     * @return Response JSON object with calculated premium sum or error
+     */
     @PostMapping("/calculate")
     public Response calculate(@RequestBody(required = false) Policy policy) {
         Response resp = new Response();

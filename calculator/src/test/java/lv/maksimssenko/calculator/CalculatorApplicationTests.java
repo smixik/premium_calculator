@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,6 +53,9 @@ class CalculatorApplicationTests {
         policy.getObjects().add(object2);
 
         assertEquals(BigDecimal.valueOf(17.13), premiumCalculator.calculate(policy));
+
+        policy.getObjects().forEach(o -> o.setSubObjects(null));
+        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_EVEN), premiumCalculator.calculate(policy));
     }
 
     @Test
