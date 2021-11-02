@@ -35,17 +35,17 @@ class CalculatorApplicationTests {
 
     @Test
     void calculate_shouldReturnPremiumSum_whenDataGiven() {
-        PolicySubObject sObject1 = new PolicySubObject("TV", BigDecimal.valueOf(100), RiskType.FIRE);
-        PolicySubObject sObject2 = new PolicySubObject("TV2", BigDecimal.valueOf(8), RiskType.THEFT);
+        PolicySubObject sObject1 = new PolicySubObject("TV", BigDecimal.valueOf(100), RiskType.FIRE.toString());
+        PolicySubObject sObject2 = new PolicySubObject("TV2", BigDecimal.valueOf(8), RiskType.THEFT.toString());
 
         PolicyObject object = new PolicyObject("House", Arrays.asList(sObject1, sObject2));
 
-        Policy policy = new Policy("N1-2", PolicyStatus.APPROVED, new ArrayList<>(Collections.singletonList(object)));
+        Policy policy = new Policy("N1-2", PolicyStatus.APPROVED.toString(), new ArrayList<>(Collections.singletonList(object)));
 
         assertEquals(BigDecimal.valueOf(2.28), premiumCalculator.calculate(policy));
 
-        PolicySubObject sObject3 = new PolicySubObject("TV3", BigDecimal.valueOf(400), RiskType.FIRE);
-        PolicySubObject sObject4 = new PolicySubObject("TV4", BigDecimal.valueOf(94.51), RiskType.THEFT);
+        PolicySubObject sObject3 = new PolicySubObject("TV3", BigDecimal.valueOf(400), RiskType.FIRE.toString());
+        PolicySubObject sObject4 = new PolicySubObject("TV4", BigDecimal.valueOf(94.51), RiskType.THEFT.toString());
 
         PolicyObject object2 = new PolicyObject("Villa", Arrays.asList(sObject3, sObject4));
 
@@ -62,7 +62,7 @@ class CalculatorApplicationTests {
 
         assertTrue(exception.getMessage().contains("Policy must be provided!"));
 
-        Policy policy = new Policy("N1-23-33", PolicyStatus.REGISTERED, new ArrayList<>());
+        Policy policy = new Policy("N1-23-33", PolicyStatus.REGISTERED.toString(), new ArrayList<>());
 
         exception = assertThrows(IllegalArgumentException.class, () -> {
             premiumCalculator.calculate(policy);
@@ -72,7 +72,7 @@ class CalculatorApplicationTests {
 
 
         PolicySubObject sObject1 = new PolicySubObject("TV", BigDecimal.valueOf(100), null);
-        PolicySubObject sObject2 = new PolicySubObject("NoteBook", BigDecimal.valueOf(8), RiskType.THEFT);
+        PolicySubObject sObject2 = new PolicySubObject("NoteBook", BigDecimal.valueOf(8), RiskType.THEFT.toString());
 
         PolicyObject object = new PolicyObject("Flat", Arrays.asList(sObject1, sObject2));
 

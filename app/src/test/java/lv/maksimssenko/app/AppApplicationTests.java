@@ -44,22 +44,10 @@ class AppApplicationTests {
     @Test
     public void givenDataIsValidPolicy_whenDataIsPosted_thenResponseIsNotNullWithPremiumSum() {
 
-        PolicySubObject sObject1 = new PolicySubObject();
-        sObject1.setName("TV");
-        sObject1.setSumInsured(BigDecimal.valueOf(100));
-        sObject1.setRiskType(RiskType.FIRE.toString());
-
-        PolicySubObject sObject2 = new PolicySubObject();
-        sObject2.setName("TV2");
-        sObject2.setSumInsured(BigDecimal.valueOf(8));
-        sObject2.setRiskType(RiskType.THEFT.toString());
-
+        PolicySubObject sObject1 = new PolicySubObject("TV", BigDecimal.valueOf(100), RiskType.FIRE.toString());
+        PolicySubObject sObject2 = new PolicySubObject("TV2",BigDecimal.valueOf(8),RiskType.THEFT.toString());
         PolicyObject object = new PolicyObject("House", Arrays.asList(sObject1, sObject2));
-
-        Policy policy = new Policy();
-        policy.setNumber("NR1-23");
-        policy.setStatus("SomeStatus");
-        policy.setObjects(new ArrayList<>(Collections.singletonList(object)));
+        Policy policy = new Policy("NR1-23","SomeStatus",new ArrayList<>(Collections.singletonList(object)));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,19 +57,9 @@ class AppApplicationTests {
         assertNotNull(result.getBody());
         assertEquals(BigDecimal.valueOf(2.28), result.getBody().getPremium());
 
-
-        PolicySubObject sObject3 = new PolicySubObject();
-        sObject3.setName("Car");
-        sObject3.setSumInsured(BigDecimal.valueOf(400));
-        sObject3.setRiskType(RiskType.FIRE.toString());
-
-        PolicySubObject sObject4 = new PolicySubObject();
-        sObject4.setName("Bicycle");
-        sObject4.setSumInsured(BigDecimal.valueOf(94.51));
-        sObject4.setRiskType(RiskType.THEFT.toString());
-
+        PolicySubObject sObject3 = new PolicySubObject("Car", BigDecimal.valueOf(400),RiskType.FIRE.toString());
+        PolicySubObject sObject4 = new PolicySubObject("Bicycle",BigDecimal.valueOf(94.51),RiskType.THEFT.toString());
         PolicyObject object1 = new PolicyObject("Garage", Arrays.asList(sObject3, sObject4));
-
         policy.getObjects().add(object1);
 
         requestEntity = new HttpEntity<>(policy, headers);

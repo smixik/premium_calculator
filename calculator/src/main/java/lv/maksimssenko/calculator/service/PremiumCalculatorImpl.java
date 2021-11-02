@@ -3,6 +3,7 @@ package lv.maksimssenko.calculator.service;
 import lv.maksimssenko.calculator.dto.Policy;
 import lv.maksimssenko.calculator.dto.PolicySubObject;
 import lv.maksimssenko.calculator.dto.RiskType;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -21,13 +22,12 @@ class PremiumCalculatorImpl implements PremiumCalculator {
 
         Map<RiskType, BigDecimal> subObjectsGroupedByRisk = policy.getObjects().stream()
                 .flatMap(ob -> ob.getSubObjects().stream())
-                .filter(sOb -> sOb.getRiskTypeEnum() != null && sOb.getSumInsured() != null)
-                .collect(Collectors.toMap(PolicySubObject::getRiskTypeEnum, PolicySubObject::getSumInsured, BigDecimal::add));
+                .filter(sOb -> sOb.getSumInsured() != null)
+                .collect(Collectors.toMap(sOb -> RiskType.valueOf(sOb.getRiskType()), PolicySubObject::getSumInsured, BigDecimal::add));
 
         return subObjectsGroupedByRisk.entrySet().stream()
                 .map(entry -> premiumSumByRiskType(entry.getKey(), entry.getValue()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_EVEN);
-//        return null;
     }
 
     private BigDecimal premiumSumByRiskType(RiskType riskType, BigDecimal totalSum){
@@ -53,7 +53,9 @@ class PremiumCalculatorImpl implements PremiumCalculator {
             throw new IllegalArgumentException("Policy must be provided!");
         } else if (CollectionUtils.isEmpty(policy.getObjects())){
             throw new IllegalArgumentException("Policy objects must be provided!");
-        } else if (policy.getObjects().stream().flatMap(o -> o.getSubObjects().stream()).anyMatch(s -> s.getRiskTypeEnum() == null)){
+        } else if (policy.getObjects()
+                .stream().flatMap(o -> o.getSubObjects().stream())
+                .anyMatch(s -> !EnumUtils.isValidEnum(RiskType.class, s.getRiskType()))){
             throw new IllegalArgumentException("Unsupported policy sub-object risk type!");
         }
     }
