@@ -1,0 +1,21 @@
+{
+  "number": "N1-2",
+  "status": "APPROVED",
+  "objects": [
+    {
+      "name": "House",
+      "subObjects": [
+        {
+          "name": "TV",
+          "sumInsured": 100,
+          "riskType": "FIRE"
+        },
+        {
+          "name": "TV2",
+          "sumInsured": 8,
+          "riskType": "THEFT"
+        }
+      ]
+    }
+  ]
+}
